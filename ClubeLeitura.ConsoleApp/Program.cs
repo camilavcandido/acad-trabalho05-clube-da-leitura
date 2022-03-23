@@ -13,10 +13,16 @@ namespace ClubeLeitura.ConsoleApp
             TelaMenuPrincipal menuPrincipal = new TelaMenuPrincipal();
             TelaCadastroCaixa telaCadastroCaixa = new TelaCadastroCaixa();
             TelaCadastroAmigo telaCadastroAmigo = new TelaCadastroAmigo();
+
             RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+            RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+
             repositorioCaixa.caixas = new Caixa[10];
+            repositorioAmigo.amigos = new Amigo[10];      
+
             telaCadastroCaixa.repositorioCaixa = repositorioCaixa;
-            telaCadastroAmigo.amigos = new Amigo[10];
+            telaCadastroAmigo.repositorioAmigo = repositorioAmigo;
+
             telaCadastroCaixa.notificador = notificador;
             telaCadastroAmigo.notificador = notificador;
 
@@ -62,15 +68,15 @@ namespace ClubeLeitura.ConsoleApp
                     }
                     else if (opcao == "2")
                     {
-                        telaCadastroAmigo.EditarAmigo();
+                    telaCadastroAmigo.EditarAmigo();
                     }
                     else if (opcao == "3")
                     {
-                        telaCadastroAmigo.ExcluirAmigo();
+                      telaCadastroAmigo.ExcluirAmigo();
                     }
                     else if (opcao == "4")
                     {
-                        telaCadastroAmigo.VisualizarAmigos("Tela");
+                       telaCadastroAmigo.VisualizarAmigos("Tela");
                         Console.ReadLine();
                     }
                 }

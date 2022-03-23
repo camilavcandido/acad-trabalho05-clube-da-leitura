@@ -74,6 +74,36 @@ namespace ClubeLeitura.ConsoleApp.ModuloCaixa
             }
         }
 
+        public Caixa[] SelecionarTodos()
+        {
+            int quantidadeCaixas = ObterQtdCaixas();
+
+            Caixa[] caixasInseridas = new Caixa[quantidadeCaixas];
+            int j = 0;
+            for (int i = 0; i < caixas.Length; i++)
+            {
+                if (caixas[i] != null) {
+                    caixasInseridas[j] = caixas[i];
+                    j++;
+                }
+            }
+
+            return caixasInseridas;
+        }
+
+        public int ObterQtdCaixas()
+        {
+            int numeroCaixas = 0;
+
+            for (int i = 0; i < caixas.Length; i++)
+            {
+                if (caixas[i] != null)
+                    numeroCaixas++;
+            }
+
+            return numeroCaixas;
+        }
+
         public int ObterPosicaoVazia()
         {
             for (int i = 0; i < caixas.Length; i++)

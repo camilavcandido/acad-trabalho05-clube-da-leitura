@@ -5,9 +5,9 @@ namespace ClubeLeitura.ConsoleApp.ModuloAmigo
 {
     public class TelaCadastroAmigo
     {
-        public Amigo[] amigos;
         public int id;
         public Notificador notificador;
+        public RepositorioAmigo repositorioAmigo;
 
         public string MostrarOpcoes()
         {
@@ -27,23 +27,18 @@ namespace ClubeLeitura.ConsoleApp.ModuloAmigo
             string opcao = Console.ReadLine();
 
             return opcao;
-        }
+        } // ok
 
         public void InserirNovoAmigo()
         {
             MostrarTitulo("Inserindo novo Amigo");
 
             Amigo amigo = ObterAmigo();
-
-            amigo.id = ++id;
-
-            int posicaoVazia = ObterPosicaoVazia();
-            amigos[posicaoVazia] = amigo;
-
-            notificador.ApresentarMensagem("Amigo inserida com sucesso!", "Sucesso");
+            repositorioAmigo.Inserir(amigo);
+            notificador.ApresentarMensagem("Amigo inserido com sucesso!", "Sucesso");
         }
 
-        private Amigo ObterAmigo()
+        public Amigo ObterAmigo()
         {
             Console.Write("Digite o nome: ");
             string nome = Console.ReadLine();
@@ -71,24 +66,45 @@ namespace ClubeLeitura.ConsoleApp.ModuloAmigo
         {
             MostrarTitulo("Editando Amigo");
 
-            VisualizarAmigos("Pesquisando");
-
-            Console.Write("Digite o id do amigo que deseja editar: ");
-            int idAmigo = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 0; i < amigos.Length; i++)
+            bool temAmigoCadastrado = VisualizarAmigos("Pesquisando");
+            if (temAmigoCadastrado == false)
             {
-                if (amigos[i].id == idAmigo)
-                {
-                    Amigo amigo = ObterAmigo();
-
-                    amigo.id = idAmigo;
-                    amigos[i] = amigo;
-                    break;
-                }
+                notificador.ApresentarMensagem("Nenhum amigo cadastrado para poder editar", "Atencao");
+                return;
             }
 
+            int idAmigo = ObterIdAmigo();
+
+
+            Amigo amigoAtualizado = ObterAmigo();
+
+            repositorioAmigo.Editar(idAmigo, amigoAtualizado);
+
             notificador.ApresentarMensagem("Amigo editada com sucesso", "Sucesso");
+        }
+
+        public int ObterIdAmigo()
+        {
+            int idAmigo;
+            bool idAmigoEncontrado;
+
+            do
+            {
+                Console.Write("Digite o ID do Amigo: ");
+                idAmigo = Convert.ToInt32(Console.ReadLine());
+
+                idAmigoEncontrado = repositorioAmigo.VerificarIdAmigoExiste(idAmigo);
+
+                if (idAmigoEncontrado == false)
+                {
+                    notificador.ApresentarMensagem("Amigo não encontrado, digite novamente",
+                        "Atencao");
+
+                }
+
+            } while (idAmigoEncontrado == false);
+
+            return idAmigo;
         }
 
         public void MostrarTitulo(string titulo)
@@ -98,38 +114,39 @@ namespace ClubeLeitura.ConsoleApp.ModuloAmigo
             Console.WriteLine(titulo);
 
             Console.WriteLine();
-        }
+        } // ok
 
         public void ExcluirAmigo()
         {
             MostrarTitulo("Excluindo Amigo");
 
-            VisualizarAmigos("Pesquisando");
+            bool temAmigoCadastrado = VisualizarAmigos("Pesquisando");
+            if (temAmigoCadastrado == false)
+            {
+                notificador.ApresentarMensagem("Nenhum amigo cadastrado para poder excluir","Atencao");
+                return;
+            }
 
             Console.Write("Digite o id do amigo que deseja excluir: ");
             int idAmigo = Convert.ToInt32(Console.ReadLine());
 
-            for (int i = 0; i < amigos.Length; i++)
-            {
-                if (amigos[i].id == idAmigo)
-                {
-                    amigos[i] = null;
-                    break;
-                }
-            }
+            repositorioAmigo.Excluir(idAmigo);
 
             notificador.ApresentarMensagem("Amigo excluído com sucesso", "Sucesso");
         }
 
-        public void VisualizarAmigos(string tipo)
+        public bool VisualizarAmigos(string tipo)
         {
             if (tipo == "Tela")
                 MostrarTitulo("Visualização de Amigos");
 
+            Amigo[] amigos = repositorioAmigo.SelecionarTodos();
+
+            if (amigos.Length == 0)
+                return false;
+
             for (int i = 0; i < amigos.Length; i++)
             {
-                if (amigos[i] == null)
-                    continue;
 
                 Amigo a = amigos[i];
 
@@ -140,20 +157,10 @@ namespace ClubeLeitura.ConsoleApp.ModuloAmigo
 
                 Console.WriteLine();
             }
-        }
+            return true;
+        } // ok
 
-        public int ObterPosicaoVazia()
-        {
-            for (int i = 0; i < amigos.Length; i++)
-            {
-                if (amigos[i] == null)
-                    return i;
-            }
-
-            return -1;
-        }
 
 
     }
-
 }

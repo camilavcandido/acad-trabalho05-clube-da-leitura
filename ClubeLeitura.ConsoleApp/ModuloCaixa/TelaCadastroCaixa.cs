@@ -6,7 +6,6 @@ namespace ClubeLeitura.ConsoleApp.ModuloCaixa
 {
     public class TelaCadastroCaixa
     {
-        public Caixa[] caixas;
         public int numeroCaixa;
         public Notificador notificador;
         public RepositorioCaixa repositorioCaixa;
@@ -39,7 +38,7 @@ namespace ClubeLeitura.ConsoleApp.ModuloCaixa
             repositorioCaixa.Inserir(novaCaixa);
 
             notificador.ApresentarMensagem("Caixa inserida com sucesso!", "Sucesso");
-        }
+        } 
 
         public Caixa ObterCaixa()
         {
@@ -100,7 +99,7 @@ namespace ClubeLeitura.ConsoleApp.ModuloCaixa
             bool numeroCaixaEncontrado;
             do
             {
-                Console.Write("Digite o número da caixa que deseja editar: ");
+                Console.Write("Digite o número da caixa: ");
                 numeroCaixa = Convert.ToInt32(Console.ReadLine());
 
                 numeroCaixaEncontrado = repositorioCaixa.VerificarNumeroCaixaExiste(numeroCaixa);
@@ -149,25 +148,16 @@ namespace ClubeLeitura.ConsoleApp.ModuloCaixa
         public bool VisualizarCaixas(string tipo)
         {
             if (tipo == "Tela")
-                MostrarTitulo("Visualização de Revistas");
+                MostrarTitulo("Visualização de Caixas");
 
-            int quantidadeCaixasCadastradas = 0;
-            for (int y = 0; y < repositorioCaixa.caixas.Length; y++)
-            {
-                if (repositorioCaixa.caixas[y] != null)
-                    quantidadeCaixasCadastradas++;
-            }
-            if (quantidadeCaixasCadastradas == 0)
-            {
+            Caixa[] caixas = repositorioCaixa.SelecionarTodos();
+
+            if (caixas.Length == 0)
                 return false;
-            }
 
-            for (int i = 0; i < repositorioCaixa.caixas.Length; i++)
+            for (int i = 0; i < caixas.Length; i++)
             {
-                if (repositorioCaixa.caixas[i] == null)
-                    continue;
-
-                Caixa c = repositorioCaixa.caixas[i];
+                Caixa c = caixas[i];
 
                 Console.WriteLine("Número: " + c.numero);
                 Console.WriteLine("Cor: " + c.cor);
@@ -175,8 +165,9 @@ namespace ClubeLeitura.ConsoleApp.ModuloCaixa
 
                 Console.WriteLine();
             }
+
             return true;
-        }
+        } 
 
 
     }
