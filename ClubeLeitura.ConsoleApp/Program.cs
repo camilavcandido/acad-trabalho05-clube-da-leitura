@@ -1,14 +1,7 @@
-﻿/**
- * O sistema deve permirtir o usuário escolher qual opção ele deseja
- *  -Para acessar o cadastro de caixas, ele deve digitar "1"
- *  -Para acessar o cadastro de revistas, ele deve digitar "2"
- *  -Para acessar o cadastro de amigquinhos, ele deve digitar "3"
- *  
- *  -Para gerenciar emprestimos, ele deve digitar "4"
- *  
- *  -Para sair, usuário deve digitar "s"
- */
-using System;
+﻿using System;
+using ClubeLeitura.ConsoleApp.Compartilhado;
+using ClubeLeitura.ConsoleApp.ModuloCaixa;
+using ClubeLeitura.ConsoleApp.ModuloAmigo;
 
 namespace ClubeLeitura.ConsoleApp
 {
@@ -16,16 +9,19 @@ namespace ClubeLeitura.ConsoleApp
     {
         static void Main(string[] args)
         {
+            Notificador notificador = new Notificador();
             TelaMenuPrincipal menuPrincipal = new TelaMenuPrincipal();
             TelaCadastroCaixa telaCadastroCaixa = new TelaCadastroCaixa();
             TelaCadastroAmigo telaCadastroAmigo = new TelaCadastroAmigo();
-            telaCadastroCaixa.caixas = new Caixa[10];
+            RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+            repositorioCaixa.caixas = new Caixa[10];
+            telaCadastroCaixa.repositorioCaixa = repositorioCaixa;
             telaCadastroAmigo.amigos = new Amigo[10];
-            telaCadastroCaixa.notificador = new Notificador();
-            telaCadastroAmigo.notificador = new Notificador();
+            telaCadastroCaixa.notificador = notificador;
+            telaCadastroAmigo.notificador = notificador;
 
             while (true)
-            {                
+            {
                 string opcaoMenuPrincipal = menuPrincipal.MostrarOpcoes();
 
                 if (opcaoMenuPrincipal == "1")
@@ -46,8 +42,13 @@ namespace ClubeLeitura.ConsoleApp
                     }
                     else if (opcao == "4")
                     {
-                        telaCadastroCaixa.VisualizarCaixas("Tela");
-                        Console.ReadLine(); 
+                        bool temCaixaCadastrada = telaCadastroCaixa.VisualizarCaixas("Tela");
+                        if (temCaixaCadastrada == false)
+                        {
+                            notificador.ApresentarMensagem("Nenhuma caixa cadastrada", "Atencao");
+                    
+                        }
+                        Console.ReadLine();
                     }
                 }
 
@@ -74,6 +75,6 @@ namespace ClubeLeitura.ConsoleApp
                     }
                 }
             }
-        }       
+        }
     }
 }

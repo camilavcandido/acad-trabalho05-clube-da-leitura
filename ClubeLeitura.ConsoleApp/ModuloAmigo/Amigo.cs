@@ -1,4 +1,4 @@
-﻿namespace ClubeLeitura.ConsoleApp
+﻿namespace ClubeLeitura.ConsoleApp.ModuloAmigo
 {
     public class Amigo
     {

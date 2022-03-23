@@ -1,6 +1,7 @@
 ﻿using System;
+using ClubeLeitura.ConsoleApp.Compartilhado;
 
-namespace ClubeLeitura.ConsoleApp
+namespace ClubeLeitura.ConsoleApp.ModuloAmigo
 {
     public class TelaCadastroAmigo
     {
@@ -81,7 +82,7 @@ namespace ClubeLeitura.ConsoleApp
                 {
                     Amigo amigo = ObterAmigo();
 
-                    amigos[i].id = idAmigo;
+                    amigo.id = idAmigo;
                     amigos[i] = amigo;
                     break;
                 }
